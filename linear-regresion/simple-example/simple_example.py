@@ -13,7 +13,7 @@ loss_fn = nn.MSELoss() # Mean Squared Error
 optimizer = optim.SGD(model.parameters(), lr=0.01) # Stochastic Gradient Descent
 # Training loop
 epochs = 1000
-for epoch in range(epochs):  
+for epoch in range(epochs):
   # Forward pass  
   y_pred = model(X)  
   loss = loss_fn(y_pred, y)
@@ -23,7 +23,7 @@ for epoch in range(epochs): 
   loss.backward()  
   optimizer.step()
 
-  if (epoch+1) % 100 == 0:    
+  if (epoch+1) % 100 == 0:
     print(f'Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}')
     
 # Print learned parameters
