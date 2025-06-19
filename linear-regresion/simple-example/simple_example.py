@@ -22,8 +22,8 @@ for epoch in range(epochs):
   optimizer.zero_grad()
   loss.backward()
   optimizer.step()
-
-  if (epoch+1) % 100 == 0:
+  
+  if (epoch+1) % 100 == 0:
     print(f'Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}')
     
 # Print learned parameters
