@@ -15,12 +15,12 @@ optimizer = optim.SGD(model.parameters(), lr=0.01) # Stochastic Gradient Descent
 epochs = 1000
 for epoch in range(epochs):
   # Forward pass  
-  y_pred = model(X)  
+  y_pred = model(X)
   loss = loss_fn(y_pred, y)
   
   # Backward pass and optimization  
-  optimizer.zero_grad()  
-  loss.backward()  
+  optimizer.zero_grad()
+  loss.backward()
   optimizer.step()
 
   if (epoch+1) % 100 == 0:
