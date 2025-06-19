@@ -18,7 +18,7 @@ for epoch in range(epochs):
   y_pred = model(X)
   loss = loss_fn(y_pred, y)
   
-  # Backward pass and optimization  
+  # Backward pass and optimization  
   optimizer.zero_grad()
   loss.backward()
   optimizer.step()
