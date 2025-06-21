@@ -48,7 +48,9 @@ def download_video(url, format_id, output_dir):
     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-def progress = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
+def progress_hood(d):
+    if d['status'] == 'downloading':
+        progress = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
         print(f"\rDownloading: {progress*100:.2f}%", end='')
     elif d['status'] == 'finished':
         print("\nDownload finished.")
