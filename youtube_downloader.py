@@ -9,6 +9,7 @@ def download_video(url, output_dir):
         'progress_hooks': [progress_hook],
         'retries': 10,
         'fragment_retries': 10,
+        'merge_output_format': 'mp4',
     }
     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
