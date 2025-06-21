@@ -1,40 +1,23 @@
 import yt_dlp as YOUTUBE
-import re as RE
 import os
 
 def get_video_info(url):
     ydl_opts = {
-        'format': 'bestvideo+bestaudio/best',
         'noplaylist': True,
     }
     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         return info
 
-def get_available_qualities(info):
+def get_available_formats(info):
     formats = info['formats']
-    available_qualities = set()
+    available_formats = {}
     for f in formats:
-        resolution = f.get('resolution', '')
-        match = RE.search(r'(\d+)p', resolution)
-        if match:
-            available_qualities.add(int(match.group(1)))
-    return sorted(list(available_qualities))
-
-def get_format_id(info, quality):
-    formats = info['formats']
-    best_format_id = None
-    best_diff = float('inf')
-    for f in formats:
-        resolution = f.get('resolution', '')
-        match = RE.search(r'(\d+)p', resolution)
-        if match:
-            resolution = int(match.group(1))
-            diff = abs(resolution - quality)
-            if diff < best_diff:
-                best_diff = diff
-                best_format_id = f['format_id']
-    return best_format_id
+        format_id = f['format_id']
+        format_note = f.get('format_note', '')
+        ext = f.get('ext', '')
+        available_formats[format_id] = f"{format_note} - {ext}"
+    return available_formats
 
 def download_video(url, format_id, output_dir):
     ydl_opts = {
@@ -48,37 +31,35 @@ def download_video(url, format_id, output_dir):
     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-def progress_hood(d):
+def progress_hook(d):
     if d['status'] == 'downloading':
-        progress = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
-        print(f"\rDownloading: {progress*100:.2f}%", end='')
+        percent = d = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
+        print(f"\rDownloading: {percent*100:.2f}%", end='')
     elif d['status'] == 'finished':
         print("\nDownload finished.")
 
 def main():
     url = input("Enter the YouTube video URL: ")
     info = get_video_info(url)
-    available_qualities = get_available_qualities(info)
-    if not available_qualities:
-        print("No qualities available.")
+    available_formats = get_available_formats(info)
+    if not available_formats:
+        print("No formats available.")
         return
 
-    print("Available qualities:")
-    for i, quality in enumerate(available_qualities, start=1):
-        print(f"{i}. {quality}p")
+    print("Available formats:")
+    for i, (format_id, format_note) in enumerate(available_formats.items(), start=1):
+        print(f"{i}. {format_note} ({format_id})")
 
-    choice = input("Enter the number of the quality you want to download: ")
+    choice = input("Enter the number of the format you want to download: ")
     try:
         choice = int(choice)
-        if choice < 1 or choice > len(available_qualities):
+        if choice < 1 or choice > len(available_formats):
             raise ValueError
     except ValueError:
         print("Invalid choice.")
         return
 
-    quality = available_qualities[choice - 1]
-    format_id = get_format_id(info, quality)
-
+    format_id = list(available_formats.keys())[choice - 1]
     default_dir = os.path.expanduser("~/storage/downloads")
     if not os.path.exists(default_dir):
         os.makedirs(default_dir)
