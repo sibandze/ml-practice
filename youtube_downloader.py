@@ -15,10 +15,10 @@ def get_available_qualities(info):
     formats = info['formats']
     available_qualities = set()
     for f in formats:
-      resolution = f.get('resolution', '')
-      match = RE.search(r'(\d+)p', resolution)
-      if match:
-        available_qualities.add(int(match.group(1)))
+        resolution = f.get('resolution', '')
+        match = RE.search(r'(\d+)p', resolution)
+        if match:
+            available_qualities.add(int(match.group(1)))
     return sorted(list(available_qualities))
 
 def get_format_id(info, quality):
@@ -26,14 +26,14 @@ def get_format_id(info, quality):
     best_format_id = None
     best_diff = float('inf')
     for f in formats:
-            resolution = f.get('resolution', '')
-            match = RE.search(r'(\d+)p', resolution)
-            if match:
-                resolution = int(match.group(1))
-                diff = abs(resolution - quality)
-                if diff < best_diff:
-                    best_diff = diff
-                    best_format_id = f['format_id']
+        resolution = f.get('resolution', '')
+        match = RE.search(r'(\d+)p', resolution)
+        if match:
+            resolution = int(match.group(1))
+            diff = abs(resolution - quality)
+            if diff < best_diff:
+                best_diff = diff
+                best_format_id = f['format_id']
     return best_format_id
 
 def download_video(url, format_id, output_dir):
@@ -48,10 +48,8 @@ def download_video(url, format_id, output_dir):
     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-def progress_hook(d):
-    if d['status'] == 'downloading':
-        percent = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
-        print(f"\rDownloading: {percent*100:.2f}%", end='')
+def progress = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
+        print(f"\rDownloading: {progress*100:.2f}%", end='')
     elif d['status'] == 'finished':
         print("\nDownload finished.")
 
@@ -60,7 +58,7 @@ def main():
     info = get_video_info(url)
     available_qualities = get_available_qualities(info)
     if not available_qualities:
-        print("No formats available.")
+        print("No qualities available.")
         return
 
     print("Available qualities:")
