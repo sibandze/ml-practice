@@ -92,10 +92,10 @@ def resume_download(output_dir):
 def main():
     os.makedirs(os.path.join(os.getcwd(), ".youtube_downloader"), exist_ok=True)
     while True:
-        print("1.Download a new video")
-        print("2. Resume a partial download")
-        print("q. QUIT")
-        choice = input("Enter your choice: ")
+        print("   1.Download a new video")
+        print("   2. Resume a partial download")
+        print("   q. QUIT")
+        choice = input("   Enter your choice: ")
         if choice == '1':
             url = input("Enter the YouTube video URL: ")
             default_dir = os.path.expanduser("~/storage/downloads")
@@ -110,11 +110,11 @@ def main():
             resume_download(default_dir)
 
         elif choice.lower() == 'q':
-             print("Stopping application...")
+             print("   Stopping application...")
              break
             
         else:
-            print("Invalid choice. Please try again.")
+            print("   Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
