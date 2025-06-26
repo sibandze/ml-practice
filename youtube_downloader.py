@@ -33,9 +33,10 @@ def progress_hook(d, temp_dir, output_dir):
         percent = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
         print(f"\rDownloading: {percent*100:.2f}%", end='')
     elif d['status'] == 'finished':
-        print(d)
         print("\nDownload finished. Finalizing...")
-    elif d['status'] == 'postprocessed':
+    else:
+        print(d['status'])
+    if d['status'] == 'postprocessed':
         print("\nPostprocessing complete. Moving to output directory...")
         for file in os.listdir(temp_dir):
             if file != ".url" and file != ".title":
