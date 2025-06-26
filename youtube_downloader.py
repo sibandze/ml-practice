@@ -49,7 +49,7 @@ def resume_download(output_dir):
     for i, temp_dir in enumerate(temp_dirs):
         print(f"{i+1}. {temp_dir}")
     choice = input("Enter the number of the download to resume, or 'all' to resume all: ")
-    if choice.lower() == 'all':
+    if not choice or choice.lower() == 'all':
         for temp_dir in temp_dirs:
             url = open(os.path.join(os.getcwd(), ".youtube_downloader", temp_dir, ".url"), "r").read().strip()
             ydl_opts = {
@@ -92,7 +92,7 @@ def resume_download(output_dir):
 def main():
     os.makedirs(os.path.join(os.getcwd(), ".youtube_downloader"), exist_ok=True)
     while True:
-        print("1. Download a new video")
+        print("1.Download a new video")
         print("2. Resume a partial download")
         choice = input("Enter your choice: ")
         if choice == '1':
@@ -100,22 +100,15 @@ def main():
             default_dir = os.path.expanduser("~/storage/downloads")
             if not os.path.exists(default_dir):
                 os.makedirs(default_dir)
-            output_dir = input(f"Enter the output directory (default={default_dir}): ")
-            if not output_dir:
-                output_dir = default_dir
-            elif not os.path.exists(output_dir):
-                os.makedirs(output_dir)
-            download_video(url, output_dir)
+            
+            download_video(url, default_dir)
         elif choice == '2':
             default_dir = os.path.expanduser("~/storage/downloads")
-            output_dir = input(f"Enter the output directory (default={default_dir}): ")
-            if not output_dir:
-                output_dir = default_dir
-            elif not os.path.exists(output_dir):
-                os.makedirs(output_dir)
-            resume_download(output_dir)
+            if not os.path.exists(default_dir):
+                os.makedirs(default_dir)
+            resume_download(default_dir)
         else:
             print("Invalid choice. Please try again.")
 
-if __name__ == "__main__":
+if name == "main":
     main()
