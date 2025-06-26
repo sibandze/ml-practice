@@ -1,5 +1,6 @@
 import yt_dlp as YOUTUBE
 import os
+import shutil
 import re
 DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), ".youtube_downloader")
 def download_video(url, output_dir):
@@ -51,7 +52,7 @@ def post_processed(temp_dir, output_dir):
         try:        
             for file in os.listdir(temp_dir):
                 if file != ".url" and file != ".title":
-                    os.replace(os.path.join(temp_dir, file), os.path.join(output_dir, file))
+                    shutil.move(os.path.join(temp_dir, file), os.path.join(output_dir, file))
             os.remove(os.path.join(temp_dir, ".url"))
             os.remove(os.path.join(temp_dir, ".title"))
             os.rmdir(temp_dir)
