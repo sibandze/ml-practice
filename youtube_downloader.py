@@ -28,16 +28,20 @@ def get_filename(url):
     with YOUTUBE.YoutubeDL() as ydl:
         info = ydl.extract_info(url, download=False)
         return slugify(info['title'])
-        
 def progress_hook(d, temp_dir, output_dir):
     if d['status'] == 'downloading':
         percent = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
         print(f"\rDownloading: {percent*100:.2f}%", end='')
     elif d['status'] == 'finished':
-        print("\nDownload finished. Moving to output directory...")
+        print(d)
+        print("\nDownload finished. Finalizing...")
+    elif d['status'] == 'postprocessed':
+        print("\nPostprocessing complete. Moving to output directory...")
         for file in os.listdir(temp_dir):
-            if file != ".url":
+            if file != ".url" and file != ".title":
                 os.replace(os.path.join(temp_dir, file), os.path.join(output_dir, file))
+        os.remove(os.path.join(temp_dir, ".url"))
+        os.remove(os.path.join(temp_dir, ".title"))
         os.rmdir(temp_dir)
         print("Download complete.")
 
