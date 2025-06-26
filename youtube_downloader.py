@@ -94,6 +94,7 @@ def main():
     while True:
         print("1.Download a new video")
         print("2. Resume a partial download")
+        print("q. QUIT")
         choice = input("Enter your choice: ")
         if choice == '1':
             url = input("Enter the YouTube video URL: ")
@@ -107,8 +108,13 @@ def main():
             if not os.path.exists(default_dir):
                 os.makedirs(default_dir)
             resume_download(default_dir)
+
+        elif choice.lower() == 'q':
+             print("Stopping application...")
+             break
+            
         else:
             print("Invalid choice. Please try again.")
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
