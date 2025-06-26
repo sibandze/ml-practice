@@ -23,11 +23,16 @@ def download_video(url, output_dir):
 
 def slugify(s):
     return re.sub(r'\W+', '_', s)
+    
+def unslugify(s):
+    return s.replace("_", " ")
+
 
 def get_filename(url):
     with YOUTUBE.YoutubeDL() as ydl:
         info = ydl.extract_info(url, download=False)
         return slugify(info['title'])
+        
 def progress_hook(d, temp_dir, output_dir):
     if d['status'] == 'downloading':
         percent = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
@@ -52,7 +57,7 @@ def resume_download(output_dir):
         print("No partial downloads found.")
         return
     for i, temp_dir in enumerate(temp_dirs):
-        print(f"{i+1}. {temp_dir}")
+        print(f"{i+1}. {unslugify(temp_dir)}")
     choice = input("Enter the number of the download to resume, or 'all' to resume all: ")
     if not choice or choice.lower() == 'all':
         for temp_dir in temp_dirs:
