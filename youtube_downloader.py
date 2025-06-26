@@ -1,9 +1,9 @@
 import yt_dlp as YOUTUBE
 import os
 import re
-
+DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), ".youtube_downloader")
 def download_video(url, output_dir):
-    temp_dir = os.path.join(os.getcwd(), f".youtube_downloader/.{get_filename(url)}")
+    temp_dir = os.path.join(DOWNLOAD_DIR, get_filename(url))
     os.makedirs(temp_dir, exist_ok=True)
     with open(os.path.join(temp_dir, ".url"), "w") as f:
         f.write(url)
@@ -47,7 +47,7 @@ def progress_hook(d, temp_dir, output_dir):
         print("Download complete.")
 
 def resume_download(output_dir):
-    temp_dirs = [d for d in os.listdir(os.path.join(os.getcwd(), ".youtube_downloader")) if os.path.isdir(os.path.join(os.getcwd(), ".youtube_downloader", d))]
+    temp_dirs = [d for d in os.listdir(DOWNLOAD_DIR) if os.path.isdir(os.path.join(DOWNLOAD_DIR, d))]
     if not temp_dirs:
         print("No partial downloads found.")
         return
@@ -56,12 +56,12 @@ def resume_download(output_dir):
     choice = input("Enter the number of the download to resume, or 'all' to resume all: ")
     if not choice or choice.lower() == 'all':
         for temp_dir in temp_dirs:
-            url = open(os.path.join(os.getcwd(), ".youtube_downloader", temp_dir, ".url"), "r").read().strip()
+            url = open(os.path.join(DOWNLOAD_DIR, temp_dir, ".url"), "r").read().strip()
             ydl_opts = {
                 'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
                 'noplaylist': True,
-                'outtmpl': os.path.join(os.getcwd(), ".youtube_downloader", temp_dir, '%(title)s.%(ext)s'),
-                'progress_hooks': [lambda d: progress_hook(d, os.path.join(os.getcwd(), ".youtube_downloader", temp_dir), output_dir)],
+                'outtmpl': os.path.join(DOWNLOAD_DIR, temp_dir, '%(title)s.%(ext)s'),
+                'progress_hooks': [lambda d: progress_hook(d, os.path.join(DOWNLOAD_DIR, temp_dir), output_dir)],
                 'retries': 10,
                 'fragment_retries': 10,
             }
@@ -75,12 +75,12 @@ def resume_download(output_dir):
             choice = int(choice)
             if 1 <= choice <= len(temp_dirs):
                 temp_dir = temp_dirs[choice - 1]
-                url = open(os.path.join(os.getcwd(), ".youtube_downloader", temp_dir, ".url"), "r").read().strip()
+                url = open(os.path.join(DOWNLOAD_DIR, temp_dir, ".url"), "r").read().strip()
                 ydl_opts = {
                     'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
                     'noplaylist': True,
-                    'outtmpl': os.path.join(os.getcwd(), ".youtube_downloader", temp_dir, '%(title)s.%(ext)s'),
-                    'progress_hooks': [lambda d: progress_hook(d, os.path.join(os.getcwd(), ".youtube_downloader", temp_dir), output_dir)],
+                    'outtmpl': os.path.join(DOWNLOAD_DIR, temp_dir, '%(title)s.%(ext)s'),
+                    'progress_hooks': [lambda d: progress_hook(d, os.path.join(DOWNLOAD_DIR, temp_dir), output_dir)],
                     'retries': 10,
                     'fragment_retries': 10,
                 }
@@ -95,7 +95,7 @@ def resume_download(output_dir):
             print("Invalid input.")
 
 def main():
-    os.makedirs(os.path.join(os.getcwd(), ".youtube_downloader"), exist_ok=True)
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     while True:
         print("   1.Download a new video")
         print("   2. Resume a partial download")
