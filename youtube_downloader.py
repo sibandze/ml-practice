@@ -40,7 +40,7 @@ def progress_hook(d, temp_dir, output_dir):
     elif d['status'] == 'finished':
         print("\nDownload finished. Finalizing...")
     else:
-        print(d['status'])
+        print("Status: ",d['status'])
     if d['status'] == 'postprocessed':
         print("\nPostprocessing complete. Moving to output directory...")
         for file in os.listdir(temp_dir):
