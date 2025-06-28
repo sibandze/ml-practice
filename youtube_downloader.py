@@ -113,7 +113,7 @@ def resume_download(output_dir):
                 try:
                     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
                         print()
-                        print(f"  Downloading: {title[choice-1]}")
+                        print(f"  Downloading: {titles[choice-1]}")
                         print()
                         ydl.download([url])
                     post_processed(temp_dir, output_dir)
