@@ -2,15 +2,10 @@ import yt_dlp as YOUTUBE
 import os
 import shutil
 import re
+
 DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), ".youtube_downloader")
-def download_video(url, output_dir):
-    title = get_filename(url)
-    temp_dir = os.path.join(DOWNLOAD_DIR, slugify(title))
-    os.makedirs(temp_dir, exist_ok=True)
-    with open(os.path.join(temp_dir, ".url"), "w") as f:
-        f.write(url)
-    with open(os.path.join(temp_dir, ".title"), "w") as f:
-        f.write(title)
+
+def download_video_content(title, temp_dir, output_dir, url):
     ydl_opts = {
         'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
         'noplaylist': True,
@@ -23,13 +18,23 @@ def download_video(url, output_dir):
     try:
         with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
             print()
-            print(f"  Downloading: {title}")
+            print(f" Downloading: {title}")
             print()
             ydl.download([url])
-        post_processed(temp_dir, output_dir)
+            post_processed(temp_dir, output_dir)
     except Exception as e:
         print(f"Error downloading video: {e}")
-
+        
+def download_video(url, output_dir):
+    title = get_filename(url)
+    temp_dir = os.path.join(DOWNLOAD_DIR, slugify(title))
+    os.makedirs(temp_dir, exist_ok=True)
+    with open(os.path.join(temp_dir, ".url"), "w") as f:
+        f.write(url)
+    with open(os.path.join(temp_dir, ".title"), "w") as f:
+        f.write(title)
+    download_video_content(title, temp_dir, output_dir, url)
+    
 def slugify(s):
     return re.sub(r'\W+', '_', s)
     
@@ -77,49 +82,14 @@ def resume_download(output_dir):
         for idx, temp_dir in enumerate(temp_dirs):
             temp_dir = os.path.join(DOWNLOAD_DIR, temp_dir)
             url = open(os.path.join(temp_dir, ".url"), "r").read().strip()
-            ydl_opts = {
-                'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
-                'noplaylist': True,
-                'quiet': True,
-                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-                'progress_hooks': [lambda d: progress_hook(d, temp_dir, output_dir)],
-                'retries': 10,
-                'fragment_retries': 10,
-            }
-            try:
-                with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
-                    print()
-                    print(f"  Downloading: {titles[idx]}")
-                    print()
-                    ydl.download([url])
-                post_processed(temp_dir, output_dir)
-            except Exception as e:
-                print(f"Error resuming download: {e}")
+            download_video_content(titles[idx], temp_dir, output_dir, url)
     else:
         try:
             choice = int(choice)
             if 1 <= choice <= len(temp_dirs):
                 temp_dir = os.path.join(DOWNLOAD_DIR, temp_dirs[choice - 1])
                 url = open(os.path.join(temp_dir, ".url"), "r").read().strip()
-                ydl_opts = {
-                    'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
-                    'noplaylist': True,
-                    'quiet': True,
-                    'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-                    'progress_hooks': [lambda d: progress_hook(d, os.path.join(DOWNLOAD_DIR, temp_dir), output_dir)],
-                    'retries': 10,
-                    'fragment_retries': 10,
-                }
-                try:
-                    with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
-                        print()
-                        print(f"  Downloading: {titles[choice-1]}")
-                        print()
-                        ydl.download([url])
-                    post_processed(temp_dir, output_dir)
-                        
-                except Exception as e:
-                    print(f"Error resuming download: {e}")
+               download_video_content(titles[choice-1], temp_dir, output_dir, url)
             else:
                 print("Invalid choice.")
         except ValueError:
