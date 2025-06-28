@@ -89,7 +89,7 @@ def resume_download(output_dir):
             if 1 <= choice <= len(temp_dirs):
                 temp_dir = os.path.join(DOWNLOAD_DIR, temp_dirs[choice - 1])
                 url = open(os.path.join(temp_dir, ".url"), "r").read().strip()
-               download_video_content(titles[choice-1], temp_dir, output_dir, url)
+                download_video_content(titles[choice-1], temp_dir, output_dir, url)
             else:
                 print("Invalid choice.")
         except ValueError:
