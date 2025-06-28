@@ -22,6 +22,9 @@ def download_video(url, output_dir):
     }
     try:
         with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
+            print()
+            print(f"  Downloading: {title}")
+            print()
             ydl.download([url])
         post_processed(temp_dir, output_dir)
     except Exception as e:
@@ -30,12 +33,8 @@ def download_video(url, output_dir):
 def slugify(s):
     return re.sub(r'\W+', '_', s)
     
-def unslugify(s):
-    return s.replace("_", " ")
-
-
 def get_filename(url):
-    with YOUTUBE.YoutubeDL() as ydl:
+    with YOUTUBE.YoutubeDL({'quiet': True}) as ydl:
         info = ydl.extract_info(url, download=False)
         return info['title']
         
@@ -47,6 +46,7 @@ def progress_hook(d, temp_dir, output_dir):
         print("\nPartial download finished. Finalizing...")
     else:
         print("Status: ",d['status'])
+        
 def post_processed(temp_dir, output_dir):
         print("\nPostprocessing complete. Moving to output directory...")
         try:        
@@ -67,12 +67,14 @@ def resume_download(output_dir):
     if not temp_dirs:
         print("No partial downloads found.")
         return
+    titles = []
     for i, temp_dir in enumerate(temp_dirs):
         title = open(os.path.join(DOWNLOAD_DIR,temp_dir, ".title"), "r").read().strip()
+        titles.append(title)
         print(f"{i+1}. {title}")
     choice = input("Enter the number of the download to resume, or 'all' to resume all: ")
     if not choice or choice.lower() == 'all':
-        for temp_dir in temp_dirs:
+        for idx, temp_dir in enumerate(temp_dirs):
             temp_dir = os.path.join(DOWNLOAD_DIR, temp_dir)
             url = open(os.path.join(temp_dir, ".url"), "r").read().strip()
             ydl_opts = {
@@ -86,6 +88,9 @@ def resume_download(output_dir):
             }
             try:
                 with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
+                    print()
+                    print(f"  Downloading: {titles[idx]}")
+                    print()
                     ydl.download([url])
                 post_processed(temp_dir, output_dir)
             except Exception as e:
@@ -107,6 +112,9 @@ def resume_download(output_dir):
                 }
                 try:
                     with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
+                        print()
+                        print(f"  Downloading: {title[choice-1]}")
+                        print()
                         ydl.download([url])
                     post_processed(temp_dir, output_dir)
                         
