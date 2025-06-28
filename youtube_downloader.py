@@ -49,9 +49,7 @@ def progress_hook(d, temp_dir, output_dir):
         print(f"\rDownloading: {percent*100:.2f}%", end='')
     elif d['status'] == 'finished':
         print("\nPartial download finished. Finalizing...")
-    else:
-        print("Status: ",d['status'])
-        
+            
 def post_processed(temp_dir, output_dir):
         print("\nPostprocessing complete. Moving to output directory...")
         try:        
@@ -98,12 +96,12 @@ def resume_download(output_dir):
 def main():
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     while True:
-        print("   1.Download a new video")
+        print("   1. Download a new video")
         print("   2. Resume a partial download")
         print("   q. QUIT")
         choice = input("   Enter your choice: ")
         if choice == '1':
-            url = input("Enter the YouTube video URL: ")
+            url = input("   Enter the YouTube video URL: ")
             default_dir = os.path.expanduser("~/storage/downloads")
             if not os.path.exists(default_dir):
                 os.makedirs(default_dir)
