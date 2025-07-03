@@ -129,7 +129,7 @@ def main():
                 print(f"   Error downloading {url}. More details {e}")
 
 
-        elif choice == '2':
+        elif not choice or choice == '2':
             resume_download(default_dir)
 
         elif choice.lower() == 'q':
