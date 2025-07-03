@@ -55,7 +55,7 @@ def toKB(bytes):
 def progress_hook(d, temp_dir, output_dir):
     if d['status'] == 'downloading':
         percent = d.get('downloaded_bytes', 0) / d.get('total_bytes', 1)
-        print(f"\r   Downloading: {percent*100:.2f}% {toMB(d.get('downloaded_bytes',0)):.2f}MB of {toMB(d.get('total_bytes',1)):.2f}MB at {toKB(d.get('speed',0)):.2f}kbps", end='')
+        print(f"\r\033[K   Downloading: {percent*100:.2f}% {toMB(d.get('downloaded_bytes',0)):.2f}MB of {toMB(d.get('total_bytes',1)):.2f}MB at {toKB(d.get('speed',0)):.2f}kbps", end='')
     elif d['status'] == 'finished':
         print("\n   Partial download finished. Finalizing...")
             
