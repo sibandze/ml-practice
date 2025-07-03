@@ -1,4 +1,5 @@
 import yt_dlp as YOUTUBE
+import sys
 import os
 import shutil
 import re
@@ -95,6 +96,18 @@ def resume_download(output_dir):
 
 def main():
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+    default_dir = os.path.expanduser("~/storage/downloads")
+    if not os.path.exists(default_dir):
+        os.makedirs(default_dir)
+    
+    for i in range(len(sys.argv)):
+        try:
+            download_video(sys.argv[i], default_dir)
+        except Exception as e:
+            print(f"   Error downloading {sys.argv[i]}. More details {e}")
+            
+            
+        
     while True:
         print("   1. Download a new video")
         print("   2. Resume a partial download")
@@ -102,15 +115,13 @@ def main():
         choice = input("   Enter your choice: ")
         if choice == '1':
             url = input("   Enter the YouTube video URL: ")
-            default_dir = os.path.expanduser("~/storage/downloads")
-            if not os.path.exists(default_dir):
-                os.makedirs(default_dir)
-            
-            download_video(url, default_dir)
+            try:
+                download_video(url, default_dir)
+            except Exception as e:
+                print(f"   Error downloading {url}. More details {e}")
+
+
         elif choice == '2':
-            default_dir = os.path.expanduser("~/storage/downloads")
-            if not os.path.exists(default_dir):
-                os.makedirs(default_dir)
             resume_download(default_dir)
 
         elif choice.lower() == 'q':
