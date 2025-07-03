@@ -101,6 +101,7 @@ def main():
         os.makedirs(default_dir)
     
     for i in range(len(sys.argv)):
+        print(i, sys.argv[i])
         try:
             download_video(sys.argv[i], default_dir)
         except Exception as e:
