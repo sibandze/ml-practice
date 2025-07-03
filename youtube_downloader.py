@@ -8,13 +8,15 @@ DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), ".youtube_downloader")
 
 def download_video_content(title, temp_dir, output_dir, url):
     ydl_opts = {
-        'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
+        'format': 'bestvideo[height<=480]+bestaudio/best',
         'noplaylist': True,
         'quiet': True,
+        'no_warnings': True,
+        'noprogress': True,
         'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
         'progress_hooks': [lambda d: progress_hook(d, temp_dir, output_dir)],
-        'retries': 10,
-        'fragment_retries': 10,
+        'retries': 100,
+        'fragment_retries': 100,
     }
     try:
         with YOUTUBE.YoutubeDL(ydl_opts) as ydl:
@@ -100,8 +102,7 @@ def main():
     if not os.path.exists(default_dir):
         os.makedirs(default_dir)
     
-    for i in range(len(sys.argv)):
-        print(i, sys.argv[i])
+    for i in range(1,len(sys.argv)):
         try:
             download_video(sys.argv[i], default_dir)
         except Exception as e:
