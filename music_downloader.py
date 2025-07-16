@@ -106,11 +106,15 @@ def resume_download(output_dir):
         title = open(os.path.join(DOWNLOAD_DIR,temp_dir, ".title"), "r").read().strip()
         titles.append(title)
         print(f"   {i+1}. {title},")
-
-    with open(os.path.join(DOWNLOAD_DIR, 'urls'), 'r') as f:
+    urls = []
+    try:
+        with open(os.path.join(DOWNLOAD_DIR, 'urls'), 'r') as f:
          urls = f.readlines()
          if urls:
              print(f"   and {len(urls)} others." if titles else f"   {len(urls)} urls")
+    except Exception as e:
+        pass
+
     if not temp_dirs and not urls:
         print("   No partial downloads found.")
         return
