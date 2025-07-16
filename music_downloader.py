@@ -5,7 +5,7 @@ import shutil
 import re
 
 DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), ".youtube_music_downloader")
-default_dir = ;;;
+default_dir = os.path.expanduser("~/storage/downloads/music")
 
 def download_video_content(title, temp_dir, output_dir, url):
     ydl_opts = {
@@ -42,6 +42,7 @@ def download_video(url, output_dir):
         f.write(url)
     with open(os.path.join(temp_dir, ".title"), "w") as f:
         f.write(title)
+    remove_url_from_temp_file(url)
     download_video_content(title, temp_dir, output_dir, url)
     
 def slugify(s):
@@ -120,7 +121,11 @@ def resume_download(output_dir):
             url = open(os.path.join(temp_dir, ".url"), "r").read().strip()
             download_video_content(titles[idx], temp_dir, output_dir, url)
         for url in urls:
-             
+            try:
+                download_video(url.strip(), default_dir)
+            except Exception as e:
+                print(f"   Error downloading {url.strip()}. More details {e}")
+                        
     else:
         try:
             choice = int(choice)
@@ -135,7 +140,6 @@ def resume_download(output_dir):
 
 def main():
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-    default_dir = os.path.expanduser("~/storage/downloads/music")
     if not os.path.exists(default_dir):
         os.makedirs(default_dir)
     for i in range(1, len(sys.argv)):
@@ -149,7 +153,7 @@ def main():
             
         
     while True:
-        print("   1. Download a new video")
+        print("   1. Download a new audio")
         print("   2. Resume a partial download")
         print("   q. QUIT")
         choice = input("   Enter your choice: ")
