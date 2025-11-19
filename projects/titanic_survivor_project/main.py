@@ -14,7 +14,7 @@ from src.models import (
 from src.evaluate import plot_confusion_matrix, plot_roc_curve, plot_feature_importance
 
 # --- Configuration ---
-BASE_PATH = '/content/drive/MyDrive/ML/projects/titanic_survival_project'
+BASE_PATH = '/' # '/content/drive/MyDrive/ML/projects/titanic_survival_project'
 RAW_DATA_PATH = os.path.join(BASE_PATH, 'data/raw/titanic.csv')
 PROCESSED_DATA_PATH = os.path.join(BASE_PATH, 'data/processed/titanic_processed.csv')
 MODEL_SAVE_PATH = os.path.join(BASE_PATH, 'models/titanic_best_model.pkl')
