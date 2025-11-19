@@ -72,7 +72,7 @@ def create_cabin_feature(df):
     """
     Creates a binary feature 'HasCabin' from the 'Cabin' column.
     """
-    # Cell 13 logic: Checks if 'Cabin' is NOT NaN and converts boolean to integer (1 or 0)
+    # Checks if 'Cabin' is NOT NaN and converts boolean to integer (1 or 0)
     df['HasCabin'] = df['Cabin'].notna().astype(int)
     print("Created 'HasCabin' feature.")
     return df
