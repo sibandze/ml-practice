@@ -1,0 +1,16 @@
+# Core Data Analysis
+pandas
+numpy
+
+# Visualization
+matplotlib
+seaborn
+missingno
+
+# Machine Learning
+scikit-learn
+joblib
+
+# Notebook Support (so you can run .ipynb files in VS Code/Codespaces)
+ipykernel
+notebook
