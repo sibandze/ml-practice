@@ -18,7 +18,7 @@ def get_candidate_models():
             'params': {
                 'solver': ['liblinear', 'lbfgs'],
                 'C': [0.01, 0.1, 1, 10, 100],
-                'penalty': ['l2'] # l2 works for both solvers
+                'l1_ratio': [0] # l2 works for both solvers
             }
         },
         'RandomForest': {

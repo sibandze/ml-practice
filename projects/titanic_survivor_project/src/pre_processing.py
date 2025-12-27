@@ -59,10 +59,13 @@ def impute_missing_values(df):
 
     # --- Embarked Imputation (Mode) ---
     mode_embarked = df_imputed['Embarked'].mode()[0]
-    df_imputed['Embarked'].fillna(mode_embarked, inplace=True)
+    df_imputed.fillna({'Embarked': mode_embarked}, inplace=True)
 
     # Fill missing Fare
-    df_imputed['Fare'].fillna(df_imputed['Fare'].median(), inplace=True)
+    df_imputed.fillna({
+                      'Fare': df_imputed['Fare'].median()
+                      },
+                      inplace=True)
 
     print("Imputation complete (Age, Embarked, Fare handled).")
     return df_imputed

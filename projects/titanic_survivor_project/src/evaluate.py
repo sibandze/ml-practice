@@ -17,16 +17,21 @@ def plot_confusion_matrix(y_true, y_pred, output_path):
     Generates and saves a heatmap of the confusion matrix.
     """
     cm = confusion_matrix(y_true, y_pred)
-    
+
     fig, ax = plt.subplots(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False, ax=ax)
-    
+    sns.heatmap(cm,
+                annot=True,
+                fmt='d',
+                cmap='Blues',
+                cbar=False,
+                ax=ax)
+
     ax.set_title('Confusion Matrix')
     ax.set_xlabel('Predicted Label')
     ax.set_ylabel('True Label')
     ax.set_xticklabels(['Died', 'Survived'])
     ax.set_yticklabels(['Died', 'Survived'])
-    
+
     save_plot(fig, output_path)
 
 def plot_roc_curve(model, X_test, y_test, output_path):
@@ -44,9 +49,20 @@ def plot_roc_curve(model, X_test, y_test, output_path):
     roc_auc = auc(fpr, tpr)
 
     fig, ax = plt.subplots(figsize=(8, 6))
-    ax.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
-    ax.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-    
+    ax.plot(
+            fpr,
+            tpr,
+            color='darkorange',
+            lw=2,
+            label=f'ROC curve (AUC = {roc_auc:.2f})'
+           )
+    ax.plot(
+            [0, 1],
+            [0, 1],
+            color='navy',
+            lw=2, linestyle='--'
+           )
+
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('False Positive Rate')
@@ -54,7 +70,7 @@ def plot_roc_curve(model, X_test, y_test, output_path):
     ax.set_title('Receiver Operating Characteristic (ROC)')
     ax.legend(loc="lower right")
     ax.grid(alpha=0.3)
-    
+
     save_plot(fig, output_path)
 
 def plot_feature_importance(model, feature_names, output_path):
@@ -68,7 +84,7 @@ def plot_feature_importance(model, feature_names, output_path):
     if hasattr(model, 'feature_importances_'):
         importances = model.feature_importances_
         title = "Random Forest Feature Importance"
-    
+
     # 2. Check for Linear Model Coefficients (Logistic Regression)
     elif hasattr(model, 'coef_'):
         importances = model.coef_[0]
@@ -83,7 +99,7 @@ def plot_feature_importance(model, feature_names, output_path):
         'Feature': feature_names,
         'Importance': importances
     })
-    
+
     # For coefficients, we might care about magnitude (absolute value) for sorting
     # or raw values to see positive/negative correlation. 
     # Here we sort by absolute magnitude but plot raw values.
@@ -91,10 +107,15 @@ def plot_feature_importance(model, feature_names, output_path):
     feature_df = feature_df.sort_values(by='Abs_Importance', ascending=False)
 
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x='Importance', y='Feature', data=feature_df, palette='viridis', ax=ax)
-    
+    sns.barplot(
+                x='Importance',
+                y='Feature',
+                data=feature_df,
+                palette='viridis',
+                ax=ax
+               )
+
     ax.set_title(title)
     ax.set_xlabel('Importance Score')
     ax.axvline(x=0, color='black', linestyle='-', linewidth=0.5) # Zero line for coefficients
-    
     save_plot(fig, output_path)

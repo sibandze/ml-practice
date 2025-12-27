@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 # Import modules
-from src.data_processing import reprocess_and_split_data
+from src.pre_processing import reprocess_and_split_data
 from src.models import (
     get_candidate_models,
     train_and_tune_models,
